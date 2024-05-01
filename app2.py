@@ -13,19 +13,18 @@ import google.generativeai as genai
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 
-def get_gemini_response(input, pdf_content, prompt):
+def get_gemini_response(prompt, pdf_content, input):
     model = genai.GenerativeModel('gemini-1.0-pro-latest')
-    response = model.generate_content([input, pdf_content, prompt])
+    response = model.generate_content([prompt, pdf_content, input])
     return response.text
 
 
 def input_pdf_setup(uploaded_file):
     if uploaded_file is not None:
-        text = "this is the text in resume, "
+        text = "this is the text in resume of a person who applied for the job,"
         # with open(uploaded_file., "rb") as file:
         #     # Create a PDF reader object
         pdf_reader = PyPDF2.PdfReader(uploaded_file)
-        print(len(pdf_reader.pages))
         # Iterate through each page of the PDF
         for page_num in range(len(pdf_reader.pages)):
             # Extract text from the current page
@@ -64,6 +63,9 @@ input_prompt1 = """
  You are an experienced Technical Human Resource Manager,your task is to review the provided resume against the job description. 
   Please share your professional evaluation on whether the candidate's profile aligns with the role. 
  Highlight the strengths and weaknesses of the applicant in relation to the specified job requirements.
+
+Automatically adjust the spacing between the words in the response.
+
 """
 
 input_prompt2 = """
@@ -74,20 +76,31 @@ the percentage of resume is calculated with 50% for skills and 50 % persent for 
 
 formula for skills nof skills in resume/skills in job description * 50
 check the year in resume with least year and recent year
-Experience=recent year- least year
-formula for experence number of experience in resume/experience in job description * 50,if experience is less than in job description then percentage of experence is 0% 
+Experience=calculate between the year and months and calculate
+formula for experence number of experience in resume/experience in job description * 50
 
 UG refered for Under Graduate, PG refered for Post Graduate in education.
 
-And Understand the domain of the resume and job description and how they are matching
+And Understand the domain of the resume and job description and how they are matching.
+
+Automatically adjust the spacing between the words in the response.
 """
 
 input_prompt3 = """
-Your my chat bot assistant to answer only the given questions where the answers are present in resume and if not resume simple say 'Not mentioned in resume'
+Your role as my chatbot assistant is to provide accurate responses to specific questions by referring to the information available in the resume. If a question is asked that can be answered using details from the resume, you'll provide that answer. However, if the information is not present in the resume, you'll simply reply with "Not mentioned in resume."
 
-UG refered for Under Graduate, PG refered for Post Graduate in education.
 
-Question:{}
+To help ensure accuracy, here are some guidelines:
+
+Use "UG" to indicate Under Graduate education and "PG" for Post Graduate education.
+Any sequence of ten digits in the resume should be recognized as a phone number.
+If a string starts with 'github.com/' or 'https://github.com/', it should be considered a GitHub link.
+Strings starting with 'https://' should be identified as websites or links.
+With these guidelines in mind, you'll be able to accurately respond to questions based on the content of the resume. If you encounter any uncertainties or need clarification, feel free to ask!
+
+Question: {}
+
+Automacally adjust the spacing in answer.
 """
 
 
