@@ -7,8 +7,10 @@ import os
 import io
 from PIL import Image
 import pdf2image
+import PyPDF2
 import openai
 from openai import OpenAI
+
 
 def get_openai_response(input, pdf_content, prompt):
     openai.api_key = os.environ['OPENAI_KEY']
