@@ -8,12 +8,12 @@ import io
 from PIL import Image
 import pdf2image
 import PyPDF2
-import google.generativeai as genai
+import openai
+from openai import OpenAI
 
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 def get_openai_response(input, pdf_content, prompt):
-    # openai.api_key = key
+    openai.api_key = os.environ['OPENAI_KEY']
     client = OpenAI()
 
     response = client.chat.completions.create(
