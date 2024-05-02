@@ -10,15 +10,16 @@ import pdf2image
 import openai
 from openai import OpenAI
 
+
 def get_openai_response(input, pdf_content, prompt):
-    openai.api_key = os.environ['OPENAI_KEY']
-    client = OpenAI()
+    openai.api_key = st.secrets['openai_key']
+    client = OpenAI(api_key=st.secrets['openai_key'])
 
     response = client.chat.completions.create(
         model='gpt-3.5-turbo',
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": pdf_content+" "+input},
+            {"role": "user", "content": pdf_content + " " + input},
         ]
     )
 
@@ -26,6 +27,7 @@ def get_openai_response(input, pdf_content, prompt):
     return response
     # print("***************** AI RESPONSE ****************************")
     # print(response)
+
 
 def input_pdf_setup(uploaded_file):
     if uploaded_file is not None:
@@ -68,7 +70,7 @@ with st.sidebar:
         key="query"
     )
 
-    submit3 = st.button(label='Submit',type="primary")
+    submit3 = st.button(label='Submit', type="primary")
 
 input_prompt1 = """
  You are an experienced Technical Human Resource Manager,your task is to review the provided resume against the job description. 
